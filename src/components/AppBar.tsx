@@ -4,6 +4,8 @@ import { UserCircleIcon } from "@heroicons/react/24/outline";
 // import Logo from "../assets/logo.png";
 import { Link, useLocation } from "react-router-dom";
 import { ThemeContext } from "../context/theme";
+import { useTranslation } from "react-i18next";
+import DropDown from "./Dropdown";
 
 const userNavigation = [
   { name: "Log out", href: "/logout" },
@@ -27,11 +29,12 @@ const Appbar = () => {
   const { pathname } = useLocation();
   const [auth, setAuth] = useState(false);
   const [nav, setNav] = useState(navigation);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const user = localStorage.getItem("userData") || "";
     const parsedUser = user == "" ? {} : JSON.parse(user);
-    console.log(parsedUser);
+    // console.log(parsedUser);
     if (parsedUser.id) {
       setAuth(true);
       setNav([]);
@@ -57,6 +60,7 @@ const Appbar = () => {
         dark:border-gray-700 
         bg-gradient-to-tr from-white via-white to-amber-300 
         dark:from-gray-800 dark:via-gray-800 dark:to-amber-800
+        w-full
         "
       >
         {({ open }) => (
@@ -64,7 +68,7 @@ const Appbar = () => {
             {open && (
               <div className="absolute top-0 inset-x-0 p-2 transition transform origin-top-right md:hidden">
                 <div className="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 bg-white dark:bg-gray-700 divide-y-2 divide-amber-500 dark:dividde-amber-300 ">
-                  <div className="pt-5 pb-6 px-5">
+                  <div className="pt-3 pb-2 px-5">
                     <div className="flex items-center justify-between">
                       <Link to={"/"}>
                         {/* <img
@@ -108,7 +112,7 @@ const Appbar = () => {
                           to={item.href}
                           className="text-base font-medium text-gray-900 dark:text-gray-300 hover:text-amber-600 dark:hover:text-amber-500"
                         >
-                          {item.name}
+                          {t(item.name)}
                         </Link>
                       ))}
                     </div>
@@ -122,7 +126,7 @@ const Appbar = () => {
                     )} */}
                     <div className="flex gap-2">
                       <span className="text-gray-900 dark:text-gray-300">
-                        DarkMode{" "}
+                        {t("DarkMode")}{" "}
                       </span>
                       <Switch
                         checked={enabled}
@@ -157,6 +161,7 @@ const Appbar = () => {
                 </div>
                 <div className="hidden md:block">
                   <div className="ml-10 flex items-baseline space-x-4">
+                    <DropDown />
                     {nav.map((item) => {
                       const isCurrent = pathname.includes(item.href);
                       return (
@@ -171,7 +176,7 @@ const Appbar = () => {
                           )}
                           aria-current={isCurrent ? "page" : undefined}
                         >
-                          {item.name}
+                          {t(item.name)}
                         </Link>
                       );
                     })}
@@ -181,7 +186,7 @@ const Appbar = () => {
               <div className="hidden md:block">
                 <div className="ml-4 flex items-center gap-2 md:ml-6">
                   <span className="text-gray-500 dark:text-gray-300 font-medium text-sm">
-                    DarkMode
+                    {t("DarkMode")}
                   </span>
                   <Switch
                     checked={enabled}

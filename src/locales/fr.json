@@ -1,0 +1,21 @@
+{
+  "translation": {
+    "Add": "Ajouter",
+    "Add Transaction": "Ajouter une transaction",
+    "Add User": "Ajouter un utilisateur",
+    "Amount": "Montant",
+    "Balance": "Solde",
+    "Cancel": "Annuler",
+    "DarkMode": "Mode Sombre",
+    "Dashboard": "Tableau de bord",
+    "Description": "Description",
+    "Email": "E-mail",
+    "For": "Pour",
+    "Name": "Nom",
+    "Paid By": "Payé par",
+    "Transactions": "Transactions",
+    "Users": "Utilisateurs",
+    "Users list": "Liste des utilisateurs",
+    "Adding...": "Ajout..."
+  }
+}

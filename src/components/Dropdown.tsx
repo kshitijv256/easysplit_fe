@@ -1,71 +1,89 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { Fragment } from "react";
-import { Listbox, Transition } from "@headlessui/react";
-import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
-export default function DropDown(props: {
-  list: string[];
-  selectedList: string[];
-  setSelectedCB: (data: any) => void;
-}) {
-  const { list, selectedList, setSelectedCB } = props;
-  console.log(list, selectedList);
+/* eslint-disable @typescript-eslint/no-explicit-any */
+const list = [
+  {
+    name: "English",
+    locale: "en",
+  },
+  {
+    name: "Spanish",
+    locale: "es",
+  },
+  {
+    name: "French",
+    locale: "fr",
+  },
+];
+
+export default function DropDown() {
+  const [selected, setSelected] = useState<string>();
+  const [show, setShow] = useState(false);
+  const { i18n } = useTranslation();
+
+  useEffect(() => {
+    const locale = localStorage.getItem("locale");
+    setSelected(locale || "en");
+  }, []);
+
+  useEffect(() => {
+    if (selected) {
+      i18n.changeLanguage(selected);
+      localStorage.setItem("locale", selected);
+    }
+  }, [i18n, selected]);
 
   return (
-    <div className="w-72 h-80">
-      <Listbox value={selectedList} by={"id"} onChange={setSelectedCB} multiple>
-        <div className="relative mt-1">
-          <Listbox.Button className="relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-green-300 sm:text-sm">
-            <span className="block truncate">{selectedList.join(", ")}</span>
-            <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-              <ChevronUpDownIcon
-                className="h-5 w-5 text-gray-400"
-                aria-hidden="true"
-              />
-            </span>
-          </Listbox.Button>
-          <Transition
-            as={Fragment}
-            leave="transition ease-in duration-100"
-            leaveFrom="opacity-100"
-            leaveTo="opacity-0"
-          >
-            <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-              {list.map((item, itemIdx) => (
-                <Listbox.Option
-                  key={itemIdx}
-                  className={({ active }) =>
-                    `relative cursor-default select-none py-2 pl-10 pr-4 ${
-                      active ? "bg-green-100 text-green-900" : "text-gray-900"
-                    }`
-                  }
-                  value={item}
-                >
-                  {({ selected }) => {
-                    console.log(selected, item, itemIdx);
-                    return (
-                      <>
-                        <span
-                          className={`block truncate ${
-                            selected ? "font-medium" : "font-normal"
-                          }`}
-                        >
-                          {item}
-                        </span>
-                        {selected ? (
-                          <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-green-600">
-                            <CheckIcon className="h-5 w-5" aria-hidden="true" />
-                          </span>
-                        ) : null}
-                      </>
-                    );
-                  }}
-                </Listbox.Option>
-              ))}
-            </Listbox.Options>
-          </Transition>
-        </div>
-      </Listbox>
+    <div className="relative">
+      <button
+        onClick={() => setShow(!show)}
+        className="text-white bg-amber-700 hover:bg-amber-800 focus:ring-4 focus:outline-none focus:ring-amber-300 font-medium rounded-md text-sm px-4 py-2 text-center inline-flex items-center dark:bg-amber-600 dark:hover:bg-amber-700 dark:focus:ring-amber-800"
+        type="button"
+      >
+        {selected}{" "}
+        <svg
+          className="w-2.5 h-2.5 ms-3"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 10 6"
+        >
+          <path
+            stroke="currentColor"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="m1 1 4 4 4-4"
+          />
+        </svg>
+      </button>
+      <div
+        className={`${
+          show ? "" : "hidden"
+        } absolute top-12 z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700`}
+      >
+        <ul
+          className="py-2 text-sm text-gray-700 dark:text-gray-200"
+          aria-labelledby="dropdownDefaultButton"
+        >
+          {list.map((item, index) => {
+            return (
+              <li
+                key={index}
+                onClick={() => {
+                  setSelected(item.locale);
+                  setShow(false);
+                }}
+              >
+                <span className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                  {item.name}
+                </span>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
     </div>
   );
 }

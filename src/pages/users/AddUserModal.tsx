@@ -3,6 +3,7 @@
 import React, { useState, useContext } from "react";
 import { ThemeContext } from "../../context/theme";
 import { loadFromLocalStorage, saveToLocalStorage } from "../../util";
+import { useTranslation } from "react-i18next";
 
 interface AddUserModalProps {
   isOpen: boolean;
@@ -14,6 +15,7 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ isOpen, onClose }) => {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const theme = useContext(ThemeContext);
+  const { t } = useTranslation();
 
   const handleSubmit = async () => {
     setLoading(true);
@@ -35,14 +37,14 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ isOpen, onClose }) => {
           theme.theme === "dark" ? "text-white" : ""
         }`}
       >
-        <h2 className="text-2xl font-bold mb-4">Add User</h2>
+        <h2 className="text-2xl font-bold mb-4">{t("Add User")}</h2>
         <form>
           <div className="mb-4">
             <label
               htmlFor="name"
               className="block text-sm font-medium mb-2 dark:text-white"
             >
-              Name
+              {t("Name")}
             </label>
             <input
               type="text"
@@ -57,7 +59,7 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ isOpen, onClose }) => {
               htmlFor="email"
               className="block text-sm font-medium mb-2 dark:text-white"
             >
-              Email
+              {t("Email")}
             </label>
             <input
               type="email"
@@ -73,7 +75,7 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ isOpen, onClose }) => {
               onClick={onClose}
               className="text-gray-500 dark:text-gray-400 mr-4"
             >
-              Cancel
+              {t("Cancel")}
             </button>
             <button
               type="button"
@@ -81,7 +83,7 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ isOpen, onClose }) => {
               className="bg-amber-400 dark:bg-amber-600 text-white px-4 py-2 rounded-md "
               disabled={loading}
             >
-              {loading ? "Adding..." : "Add"}
+              {loading ? t("Adding...") : t("Add")}
             </button>
           </div>
         </form>
