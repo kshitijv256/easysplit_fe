@@ -5,6 +5,8 @@ import Transactions from "../pages/transactions/Transactions";
 import Dashboard from "../pages/Dashboard";
 import SigninPage from "../pages/users/SigninPage";
 import LoginPage from "../pages/users/LoginPage";
+import ProtectedRoute from "./ProtectedRoute";
+import Logout from "../components/Logout";
 
 const router = createBrowserRouter([
   {
@@ -27,21 +29,39 @@ const router = createBrowserRouter([
       </Suspense>
     ),
   },
-  //   {
-  //     path: "/logout",
-  //     element: <Logout />,
-  //   },
+  {
+    path: "/logout",
+    element: <Logout />,
+  },
   {
     path: "users",
-    element: <Users />,
+    element: (
+      <ProtectedRoute>
+        <Suspense fallback={<div className="suspense-loading">Loading...</div>}>
+          <Users />
+        </Suspense>
+      </ProtectedRoute>
+    ),
   },
   {
     path: "transactions",
-    element: <Transactions />,
+    element: (
+      <ProtectedRoute>
+        <Suspense fallback={<div className="suspense-loading">Loading...</div>}>
+          <Transactions />
+        </Suspense>
+      </ProtectedRoute>
+    ),
   },
   {
     path: "dashboard",
-    element: <Dashboard />,
+    element: (
+      <ProtectedRoute>
+        <Suspense fallback={<div className="suspense-loading">Loading...</div>}>
+          <Dashboard />
+        </Suspense>
+      </ProtectedRoute>
+    ),
   },
   {
     path: "*",

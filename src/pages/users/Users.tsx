@@ -1,25 +1,28 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect } from "react";
 import Appbar from "../../components/AppBar";
-import AddUserModal from "./AddUserModal";
+// import AddUserModal from "./AddUserModal";
 import { loadFromLocalStorage } from "../../util";
 import { useTranslation } from "react-i18next";
+import { fetchUsers } from "../../utils/api";
+import { User } from "../../types/user";
 
 const updateUsers = async (
   setUsersCB: React.Dispatch<React.SetStateAction<any[]>>
 ) => {
-  const usersList = await loadFromLocalStorage("users");
+  const user = await loadFromLocalStorage("userData");
+  const usersList = await fetchUsers(user.groupId).then((res) => res.json());
   setUsersCB(usersList);
 };
 
 const Users = () => {
-  const [open, setOpen] = React.useState(false);
-  const [users, setUsers] = React.useState<any[]>([]);
+  const [users, setUsers] = React.useState<User[]>([]);
   const { t } = useTranslation();
 
   useEffect(() => {
     updateUsers(setUsers);
-  }, [open]);
+  }, []);
+
   return (
     <div className="dark:bg-gray-800 h-full">
       <Appbar />
@@ -27,22 +30,20 @@ const Users = () => {
         <h2 className="text-2xl font-bold dark:text-white">
           {t("Users list")}
         </h2>
-        <button
+        {/* <button
           onClick={() => {
             setOpen(true);
           }}
           className="bg-amber-400 dark:bg-amber-600 text-white px-4 py-2 rounded shadow-md"
         >
           {t("Add User")}
-        </button>
+        </button> */}
       </div>
-      <AddUserModal isOpen={open} onClose={() => setOpen(false)} />
-
       <ul className="p-6">
         {users.map((user: any, index: number) => {
           return (
             <li key={index} className="dark:text-white list-disc text-xl">
-              {user.name}
+              {user.firstName + " " + user.lastName}
             </li>
           );
         })}

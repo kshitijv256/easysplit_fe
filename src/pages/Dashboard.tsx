@@ -1,38 +1,26 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from "react";
 import Appbar from "../components/AppBar";
-import { loadFromLocalStorage, saveToLocalStorage } from "../util";
+import { loadFromLocalStorage } from "../util";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-
-const updateUsers = async (setUsersCB: (user: string[]) => void) => {
-  const usersList = await loadFromLocalStorage("users");
-  const names = usersList.map((user: any) => user.name);
-  setUsersCB(names);
-};
+import { addTransaction, fetchUsers } from "../utils/api";
+import { User } from "../types/user";
 
 const Dashboard = () => {
-  const [users, setUsers] = useState<string[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
   const { t } = useTranslation();
   const navigate = useNavigate();
-  useEffect(() => {
-    updateUsers(setUsers);
-  }, []);
 
-  const calculate = (data: any) => {
-    const total = data.amount;
-    const forUsers = data.for;
-    const paidBy = data.by;
-    const amount = total / forUsers.length;
-    const result = forUsers.map((user: string) => {
-      if (user === paidBy) {
-        return { name: user, amount: amount - total };
-      } else {
-        return { name: user, amount: amount };
-      }
-    });
-    return result;
+  const getMenbers = async () => {
+    const user = await loadFromLocalStorage("userData");
+    const menbers = await fetchUsers(user.groupId).then((res) => res.json());
+    setUsers(menbers);
   };
+
+  useEffect(() => {
+    getMenbers();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     // throw new Error("Function not implemented.");
@@ -40,14 +28,14 @@ const Dashboard = () => {
     const form = e.currentTarget;
     const formData = new FormData(form);
     const data = Object.fromEntries(formData);
-    const finaldata = { ...data, for: formData.getAll("for") };
-    const balance = calculate(finaldata);
-    const transaction = { ...finaldata, balance: balance };
-    console.log(transaction);
-    const txList = await loadFromLocalStorage("transactions");
-    txList.push(transaction);
-    saveToLocalStorage("transactions", txList);
-    navigate("/transactions");
+    const forList = formData.getAll("forId");
+    const finaldata = { ...data, forId: forList };
+    console.log(finaldata);
+    const res: any = await addTransaction(finaldata);
+    if (res["success"]) {
+      navigate("/transactions");
+      console.log("Transaction added successfully");
+    }
   };
 
   return (
@@ -69,6 +57,7 @@ const Dashboard = () => {
             required
             className="p-2 rounded border-0 ring-1 focus:outline-none dark:bg-slate-200 ring-gray-500 focus:ring-amber-400"
             type="number"
+            step="0.01"
             name="amount"
             placeholder={t("Amount")}
           />
@@ -79,27 +68,20 @@ const Dashboard = () => {
             name="description"
             placeholder={t("Description")}
           />
-          <input
-            required
-            className="p-2 w-full rounded border-0 ring-1 focus:outline-none dark:bg-slate-200 ring-gray-500 focus:ring-amber-400"
-            type="date"
-            name="date"
-            placeholder="Date"
-          />
           <h3 className="font-bold text-lg dark:text-white">{t("Paid By")}</h3>
           {users.map((item, idx) => (
             <div key={idx}>
               <input
                 required
                 type="radio"
-                id={item}
-                name="by"
+                id={`${item.id}`}
+                name="userId"
                 key={idx}
-                value={item}
+                value={item.id}
                 className="dark:text-white mx-2"
               />
-              <label htmlFor={item} className="dark:text-white">
-                {item}
+              <label htmlFor={`${item.id}`} className="dark:text-white">
+                {item.firstName + " " + item.lastName}
               </label>
             </div>
           ))}
@@ -107,17 +89,17 @@ const Dashboard = () => {
           <div className="font-bold text-lg dark:text-white">{t("For")}</div>
           <select
             required
-            name="for"
+            name="forId"
             className="dark:bg-gray-700 w-full overflow-hidden p-2 rounded border-0 ring-1 ring-gray-500 focus:outline-none focus:ring-amber-400"
             multiple
           >
             {users.map((item, idx) => (
               <option
                 key={idx}
-                value={item}
+                value={item.id}
                 className="checked:bg-amber-400/60 rounded dark:text-white dark:bg-gray-700 dark:checked:bg-amber-600/60 p-1 my-1"
               >
-                {item}
+                {item.firstName + " " + item.lastName}
               </option>
             ))}
           </select>

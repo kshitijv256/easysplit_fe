@@ -6,6 +6,8 @@ import { Link, useLocation } from "react-router-dom";
 import { ThemeContext } from "../context/theme";
 import { useTranslation } from "react-i18next";
 import DropDown from "./Dropdown";
+import { loadFromLocalStorage } from "../util";
+import { UserContext } from "../context/user";
 
 const userNavigation = [
   { name: "Log out", href: "/logout" },
@@ -25,21 +27,27 @@ const navigation = [
 
 const Appbar = () => {
   const { theme, setTheme } = useContext(ThemeContext);
+  const { user } = useContext(UserContext);
   const [enabled, setEnabled] = useState(theme == "dark" ? true : false);
   const { pathname } = useLocation();
   const [auth, setAuth] = useState(false);
   const [nav, setNav] = useState(navigation);
   const { t } = useTranslation();
 
-  useEffect(() => {
-    const user = localStorage.getItem("userData") || "";
-    const parsedUser = user == "" ? {} : JSON.parse(user);
-    // console.log(parsedUser);
-    if (parsedUser.id) {
+  const checkAuth = async () => {
+    const user = await loadFromLocalStorage("userData");
+    if (user.id) {
       setAuth(true);
+      setNav(navigation);
+    } else {
+      setAuth(false);
       setNav([]);
     }
-  }, []);
+  };
+
+  useEffect(() => {
+    checkAuth();
+  }, [user]);
 
   const toggleTheme = () => {
     let newTheme = "";
