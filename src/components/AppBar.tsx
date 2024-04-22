@@ -11,7 +11,7 @@ import { UserContext } from "../context/user";
 
 const userNavigation = [
   { name: "Log out", href: "/logout" },
-  { name: "Reset password", href: "/reset" },
+  // { name: "Reset password", href: "" },
 ];
 
 const classNames = (...classes: string[]): string =>
@@ -249,10 +249,14 @@ const Appbar = () => {
                               )}
                             </Menu.Item>
                           ))}
-                          {/* <Menu.Item>
+                          <Menu.Item>
                             {({ active }) => (
                               <button
-                                onClick={() => setIsOpen(true)}
+                                onClick={() => {
+                                  navigator.clipboard.writeText(
+                                    `${user?.groupId}`
+                                  );
+                                }}
                                 className={classNames(
                                   active
                                     ? "bg-gray-200/50 dark:bg-gray-600/50"
@@ -260,10 +264,10 @@ const Appbar = () => {
                                   "w-full text-left block px-4 py-2 text-sm"
                                 )}
                               >
-                                Preferences
+                                Group ID: {user?.groupId}
                               </button>
                             )}
-                          </Menu.Item> */}
+                          </Menu.Item>
                         </Menu.Items>
                       </Transition>
                     </Menu>
