@@ -3,6 +3,7 @@
 import React, { useContext } from "react";
 import { ThemeContext } from "../../context/theme";
 import { useTranslation } from "react-i18next";
+import { ArrowRightIcon } from "@heroicons/react/24/outline";
 
 interface AddUserModalProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -40,16 +41,17 @@ const PaymnetsModal: React.FC<AddUserModalProps> = ({
           theme.theme === "dark" ? "text-white" : ""
         }`}
       >
-        <h2 className="text-2xl font-bold mb-4">{t("Add User")}</h2>
+        <h2 className="text-2xl font-bold mb-4">{t("Suggested Payments")}</h2>
         {paymnets.map((payment, index) => (
-          <div key={index} className="p-4 flex justify-between">
+          <div key={index} className="p-4">
             <p>
-              {"["}
-              {payment.from}
-              {"]"} {"===>"}
-              {"["}
-              {payment.to}
-              {"]"} Amount: {payment.amount.toFixed(2)}
+              <span className="font-bold">{payment.from}</span>
+              <ArrowRightIcon className="w-6 h-6 inline-block" />
+              <span className="font-bold mr-2">{payment.to}</span>
+              {t("Amount")}:
+              <span className="font-bold ml-2">
+                {payment.amount.toFixed(2)}
+              </span>
             </p>
           </div>
         ))}
@@ -57,7 +59,7 @@ const PaymnetsModal: React.FC<AddUserModalProps> = ({
           className="p-2 rounded bg-amber-600 text-white font-bold"
           onClick={handleSubmit}
         >
-          close
+          {t("Cancel")}
         </button>
       </div>
     </div>

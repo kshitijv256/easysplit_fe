@@ -4,10 +4,12 @@ import Appbar from "../../components/AppBar";
 import { login } from "../../utils/api";
 import { saveToLocalStorage } from "../../util";
 import { UserContext } from "../../context/user";
+import { useTranslation } from "react-i18next";
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const { setUser } = useContext(UserContext);
+  const { t } = useTranslation();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -17,6 +19,10 @@ const LoginPage = () => {
     login(data)
       .then((response) => response.json())
       .then((data) => {
+        if (data.message) {
+          alert(data.message);
+          return;
+        }
         console.log("Success:", data);
         saveToLocalStorage("userData", data);
         setUser(data);
@@ -29,31 +35,31 @@ const LoginPage = () => {
   return (
     <div className="flex flex-col items-center w-full gap-4">
       <Appbar />
-      <h1>Login Page</h1>
+      <h1>{t("Login")}</h1>
       <div className="p-4 rounded bg-gray-200 dark:bg-slate-700">
-        <form onSubmit={handleSubmit} className="flex flex-col gap-2">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <input
             type="text"
             name="email"
-            placeholder="Email"
+            placeholder={t("Email")}
             className="p-2 rounded border-0 ring-1 focus:outline-none dark:bg-slate-200 ring-gray-500 focus:ring-amber-400 w-full"
           />
           <input
             type="password"
             name="password"
-            placeholder="Password"
+            placeholder={t("Password")}
             className="p-2 rounded border-0 ring-1 focus:outline-none dark:bg-slate-200 ring-gray-500 focus:ring-amber-400 w-full"
           />
           <input
             type="submit"
-            value="Login"
+            value={t("Login")}
             className="p-2 rounded bg-amber-700 text-white dark:bg-amber-600"
           />
         </form>
-        <p>
-          New here?{" "}
+        <p className="p-2">
+          {t("New here?")}{" "}
           <Link to={"/signup"} className="text-amber-500">
-            Resgister!
+            {t("Register")}
           </Link>
         </p>
       </div>

@@ -6,6 +6,7 @@ import { loadFromLocalStorage } from "../../util";
 import { useTranslation } from "react-i18next";
 import { fetchUsers } from "../../utils/api";
 import { User } from "../../types/user";
+import { UserCircleIcon } from "@heroicons/react/24/outline";
 
 const updateUsers = async (
   setUsersCB: React.Dispatch<React.SetStateAction<any[]>>
@@ -24,21 +25,11 @@ const Users = () => {
   }, []);
 
   return (
-    <div className="dark:bg-gray-800 h-full">
+    <div className="dark:bg-gray-800 h-full w-full flex flex-col items-center">
       <Appbar />
-      <div className="flex w-full px-6 py-2 justify-between">
-        <h2 className="text-2xl font-bold dark:text-white">
-          {t("Users list")}
-        </h2>
-        {/* <button
-          onClick={() => {
-            setOpen(true);
-          }}
-          className="bg-amber-400 dark:bg-amber-600 text-white px-4 py-2 rounded shadow-md"
-        >
-          {t("Add User")}
-        </button> */}
-      </div>
+      <h2 className="flex text-2xl pt-4 font-bold dark:text-white items-center gap-2">
+        <UserCircleIcon className="w-8 h-8 inline-block" /> {t("Users list")}
+      </h2>
       <ul className="p-6">
         {users.map((user: any, index: number) => {
           return (

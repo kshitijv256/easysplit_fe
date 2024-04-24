@@ -41,3 +41,10 @@ export const fetchTransactions = async (userId: number) => {
   ).then((res) => res.json());
   return transactions["transactions"];
 };
+
+export const deleteTransaction = async (id: number) => {
+  const res: any = await fetch(`${API_BASE_URL}/transactions/${id}`, {
+    method: "DELETE",
+  }).then((res) => res.json());
+  return res["success"];
+};

@@ -2,12 +2,17 @@ import React, { useContext, useEffect, useState } from "react";
 import Appbar from "../../components/AppBar";
 import { useTranslation } from "react-i18next";
 import { UserContext } from "../../context/user";
-import { fetchTransactions, fetchUsers } from "../../utils/api";
+import {
+  deleteTransaction,
+  fetchTransactions,
+  fetchUsers,
+} from "../../utils/api";
 import { User } from "../../types/user";
 import { calculate } from "../../utils/common";
 import PaymnetsModal from "../users/PaymentsModal";
+import TransactionCard from "./TransactionCard";
 
-type Transaction = {
+export type Transaction = {
   id: number;
   amount: number;
   description: string;
@@ -106,6 +111,10 @@ const Transactions = () => {
     // console.log(payments);
   };
 
+  const removeTransaction = async (id: number) => {
+    const res: boolean = await deleteTransaction(id);
+    if (res) setTransactions(transactions.filter((tx) => tx.id !== id));
+  };
   useEffect(() => {
     const locale = i18n.language;
     if (locale === "fr") {
@@ -125,41 +134,23 @@ const Transactions = () => {
   return (
     <div className="w-full flex flex-col items-center">
       <Appbar />
-      <h2 className="self-start p-2 text-2xl">{t("Transactions")}</h2>
+      <h2 className="font-bold p-2 text-2xl">{t("Transactions")}</h2>
       <button
-        className="fixed bottom-8 right-8 px-4 py-3 rounded bg-amber-700 dark:bg-amber-600 text-whit font-bold"
+        className="fixed bottom-8 right-8 px-4 py-3 rounded bg-amber-700 dark:bg-amber-600 text-white font-bold"
         onClick={() => {
           resolve();
         }}
       >
-        Resolve
+        {t("Resolve")}
       </button>
-      <div className="p-2 center w-3/4">
+      <div className="p-2 center w-1/2">
         {transactions.map((tx) => (
-          <div
-            key={tx.id}
-            className="flex flex-col gap-2 bg-gray-100 dark:bg-gray-700 p-2 rounded-lg m-2"
-          >
-            <h1 className="flex w-full justify-between text-xl font-bold dark:text-white">
-              {tx.description}
-              <span className="dark:text-gray-200">
-                {formatter.format(new Date(tx.createdAt))}
-              </span>
-            </h1>
-            <p className="dark:text-white text-xl">
-              {t("Amount")}: {tx.amount}
-            </p>
-            <p className="dark:text-white text-xl">
-              {t("Paid By")}: {mapIdtoName(tx.by)}
-            </p>
-            <p className="dark:text-white text-xl">
-              {t("For")}: {tx.for.map((u) => mapIdtoName(u)).join(", ")}
-            </p>
-            {/* <p className="dark:text-white text-xl">
-              {t("Balance")}:{" "}
-              {tx.balance.map((bal) => bal.name + " " + bal.amount).join(", ")}
-            </p> */}
-          </div>
+          <TransactionCard
+            tx={tx}
+            formatter={formatter}
+            mapIdtoName={mapIdtoName}
+            deleteCB={removeTransaction}
+          />
         ))}
       </div>
       <PaymnetsModal

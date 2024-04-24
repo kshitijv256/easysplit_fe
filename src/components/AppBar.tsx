@@ -1,6 +1,9 @@
 import { Fragment, useContext, useEffect, useState } from "react";
 import { Disclosure, Menu, Switch, Transition } from "@headlessui/react";
-import { UserCircleIcon } from "@heroicons/react/24/outline";
+import {
+  ClipboardDocumentIcon,
+  UserCircleIcon,
+} from "@heroicons/react/24/outline";
 // import Logo from "../assets/logo.png";
 import { Link, useLocation } from "react-router-dom";
 import { ThemeContext } from "../context/theme";
@@ -10,7 +13,7 @@ import { loadFromLocalStorage } from "../util";
 import { UserContext } from "../context/user";
 
 const userNavigation = [
-  { name: "Log out", href: "/logout" },
+  { name: "Logout", href: "/logout" },
   // { name: "Reset password", href: "" },
 ];
 
@@ -78,14 +81,17 @@ const Appbar = () => {
                 <div className="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 bg-white dark:bg-gray-700 divide-y-2 divide-amber-500 dark:dividde-amber-300 ">
                   <div className="pt-3 pb-2 px-5">
                     <div className="flex items-center justify-between">
-                      <Link to={"/"}>
-                        {/* <img
+                      {user?.firstName && (
+                        <Link to={"/"}>
+                          {/* <img
                           className="h-12 w-auto"
                           src={Logo}
                           alt="Sports News"
                         /> */}
-                        Logo
-                      </Link>
+                          {t("Welcome")},{" "}
+                          {user?.firstName + " " + user?.lastName}
+                        </Link>
+                      )}
                       {/* <h1 className="text-2xl font-bold text-amber-600">
                         Navigation
                       </h1> */}
@@ -159,17 +165,18 @@ const Appbar = () => {
             <div className="flex h-10 items-center justify-between">
               <div className="flex items-center justify-between w-full">
                 <div className="flex-shrink-0">
-                  <Link to={"/"}>
-                    {/* <img className="h-16 w-auto" src={Logo} alt="Sports News" /> */}
-                    Logo
-                  </Link>
+                  {user?.firstName && (
+                    <Link to={"/"} className="font-bold text-xl">
+                      {/* <img className="h-16 w-auto" src={Logo} alt="Sports News" /> */}
+                      {t("Welcome")}, {user?.firstName + " " + user?.lastName}
+                    </Link>
+                  )}
                   {/* <h1 className="text-2xl font-bold text-amber-600">
                     Need Logo
                   </h1> */}
                 </div>
                 <div className="hidden md:block">
                   <div className="ml-10 flex items-baseline space-x-4">
-                    <DropDown />
                     {nav.map((item) => {
                       const isCurrent = pathname.includes(item.href);
                       return (
@@ -244,7 +251,7 @@ const Appbar = () => {
                                     "w-full text-left block px-4 py-2 text-sm"
                                   )}
                                 >
-                                  {item.name}
+                                  {t(item.name)}
                                 </a>
                               )}
                             </Menu.Item>
@@ -264,7 +271,10 @@ const Appbar = () => {
                                   "w-full text-left block px-4 py-2 text-sm"
                                 )}
                               >
-                                Group ID: {user?.groupId}
+                                <div className="flex justify-between">
+                                  <span>Group ID: {user?.groupId} </span>
+                                  <ClipboardDocumentIcon className="w-6 h-6 inline-block" />
+                                </div>
                               </button>
                             )}
                           </Menu.Item>
@@ -274,6 +284,7 @@ const Appbar = () => {
                   ) : (
                     <div></div>
                   )}
+                  <DropDown />
                 </div>
               </div>
               <div className="-mr-2 flex md:hidden">

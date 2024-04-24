@@ -31,7 +31,7 @@ const Dashboard = () => {
     const forList = formData.getAll("forId");
     const finaldata = { ...data, forId: forList };
     console.log(finaldata);
-    const res: any = await addTransaction(finaldata);
+    const res: any = await addTransaction(finaldata).then((res) => res.json());
     if (res["success"]) {
       navigate("/transactions");
       console.log("Transaction added successfully");
@@ -44,7 +44,7 @@ const Dashboard = () => {
       <h1 className="text-2xl font-bold my-4 dark:text-white ">
         {t("Dashboard")}
       </h1>
-      <div className="p-2">
+      <div className="p-2 min-w-[25%]">
         <form
           onSubmit={handleSubmit}
           action="transaction"
@@ -55,7 +55,7 @@ const Dashboard = () => {
           </h3>
           <input
             required
-            className="p-2 rounded border-0 ring-1 focus:outline-none dark:bg-slate-200 ring-gray-500 focus:ring-amber-400"
+            className="p-2 w-full rounded border-0 ring-1 focus:outline-none dark:bg-slate-200 ring-gray-500 focus:ring-amber-400"
             type="number"
             step="0.01"
             name="amount"
@@ -63,7 +63,7 @@ const Dashboard = () => {
           />
           <input
             required
-            className="p-2 rounded border-0 ring-1 focus:outline-none dark:bg-slate-200 ring-gray-500 focus:ring-amber-400"
+            className="p-2 w-full rounded border-0 ring-1 focus:outline-none dark:bg-slate-200 ring-gray-500 focus:ring-amber-400"
             type="text"
             name="description"
             placeholder={t("Description")}
@@ -90,7 +90,7 @@ const Dashboard = () => {
           <select
             required
             name="forId"
-            className="dark:bg-gray-700 w-full overflow-hidden p-2 rounded border-0 ring-1 ring-gray-500 focus:outline-none focus:ring-amber-400"
+            className="dark:bg-gray-700 w-full p-2 rounded border-0 ring-1 ring-gray-500 focus:outline-none focus:ring-amber-400"
             multiple
           >
             {users.map((item, idx) => (
@@ -105,7 +105,7 @@ const Dashboard = () => {
           </select>
           <div className="flex flex-row-reverse w-full">
             <button
-              className="bg-amber-400 dark:bg-amber-600 text-white px-4 py-2 rounded shadow-md"
+              className="bg-amber-700 dark:bg-amber-600 text-white px-4 py-2 rounded shadow-md"
               type="submit"
             >
               + {t("Add")}

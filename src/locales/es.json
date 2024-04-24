@@ -5,7 +5,7 @@
     "Add User": "Agregar usuario",
     "Amount": "Cantidad",
     "Balance": "Balance",
-    "Cancel": "Balance",
+    "Cancel": "Cancelar",
     "DarkMode": "Modo Oscuro",
     "Dashboard": "Panel",
     "Description": "Descripción",
@@ -16,6 +16,23 @@
     "Transactions": "Actas",
     "Users": "Usuarios",
     "Users list": "Lista de usuarios",
-    "Adding...": "Añadiendo..."
+    "Adding...": "Añadiendo...",
+    "Welcome": "Bienvenido",
+    "Resolve": "Resolver",
+    "Suggested Payments": "Pagos sugeridos",
+    "Logout": "Cerrar sesión",
+    "Login": "Iniciar sesión",
+    "Password": "Contraseña",
+    "New here?": "Nuevo aquí?",
+    "Signup": "Registrarse",
+    "Register": "Registrarse",
+    "First Name": "Nombre",
+    "Last Name": "Apellido",
+    "Group Name": "Nombre del grupo",
+    "Group Code": "Código del grupo",
+    "Create Group": "Crear grupo",
+    "Join Group": "Unirse al grupo",
+    "Submit": "Enviar",
+    "Already a member?": "Ya eres miembro?"
   }
 }

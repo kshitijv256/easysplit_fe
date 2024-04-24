@@ -16,6 +16,23 @@
     "Transactions": "Transactions",
     "Users": "Utilisateurs",
     "Users list": "Liste des utilisateurs",
-    "Adding...": "Ajout..."
+    "Adding...": "Ajout...",
+    "Welcome": "Bienvenue",
+    "Resolve": "Résoudre",
+    "Suggested Payments": "Paiements suggérés",
+    "Logout": "Déconnexion",
+    "Login": "Connexion",
+    "Password": "Mot de passe",
+    "New here?": "Nouveau ici?",
+    "Signup": "S'inscrire",
+    "Register": "S'inscrire",
+    "First Name": "Prénom",
+    "Last Name": "Nom de famille",
+    "Group Name": "Nom du groupe",
+    "Group Code": "Code du groupe",
+    "Create Group": "Créer un groupe",
+    "Join Group": "Rejoindre un groupe",
+    "Submit": "Soumettre",
+    "Already a member?": "Déjà membre?"
   }
 }

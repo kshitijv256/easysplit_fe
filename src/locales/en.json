@@ -16,6 +16,23 @@
     "Transactions": "Transactions",
     "Users": "Users",
     "Users list": "Users list",
-    "Adding...": "Adding..."
+    "Adding...": "Adding...",
+    "Welcome": "Welcome",
+    "Resolve": "Resolve",
+    "Suggested Payments": "Suggested Payments",
+    "Logout": "Logout",
+    "Login": "Login",
+    "Password": "Password",
+    "New here?": "New here?",
+    "Signup": "Signup",
+    "Register": "Register",
+    "First Name": "First Name",
+    "Last Name": "Last Name",
+    "Group Name": "Group Name",
+    "Group Code": "Group Code",
+    "Create Group": "Create Group",
+    "Join Group": "Join Group",
+    "Submit": "Submit",
+    "Already a member?": "Already a member?"
   }
 }
